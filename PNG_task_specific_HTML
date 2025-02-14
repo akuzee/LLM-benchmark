@@ -1,76 +1,196 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        .task-header {
-            background-color: #f8f9fa;
-            border-left: 4px solid #0066cc;
-            padding: 1rem;
-            margin-bottom: 2rem;
-        }
-        .job-details {
-            margin: 1rem 0;
-        }
-        .field-label {
-            font-weight: bold;
-            color: #444;
-        }
-        .field-value {
-            text-decoration: underline;
-            color: #666;
-        }
-        .content-section {
-            margin: 2rem 0;
-        }
-        .pdf-container {
-            width: 100%;
-            height: 500px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            overflow: auto;
-            margin: 1rem 0;
-        }
-        .pdf-content {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .instruction {
-            font-style: italic;
-            color: #666;
-            margin: 1rem 0;
-        }
-    </style>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <style>
+       /* Foundation styles for viewport control */
+       body, html {
+           margin: 0;
+           padding: 0;
+           width: 100%;
+           height: 100%;
+           overflow-x: hidden;
+           font-family: Arial, sans-serif;
+           -webkit-text-size-adjust: 100%;
+       }
+       
+       /* Force Qualtrics skin to respect height settings */
+       .Skin {
+           min-height: auto !important;
+       }
+
+       /* Add top anchor reference for scroll positioning */
+       body::before {
+           content: '';
+           display: block;
+           position: absolute;
+           top: 0;
+           height: 1px;
+       }
+       
+       /* Main content wrapper with adjusted positioning */
+       .content-wrapper {
+           width: 100%;
+           max-width: 800px;
+           margin: 0 auto;
+           padding: 20px;
+           box-sizing: border-box;
+           overflow: visible;
+           position: relative;
+           top: 0;
+           transform: none;
+       }
+       
+       /* Typography for headers */
+       h3 {
+           color: #666666;
+           font-size: 28px;
+           font-weight: normal;
+           margin-bottom: 30px;
+       }
+       
+       /* Text styling for job and responsibility lines */
+       .job-line, .responsibility-line {
+           color: #666666;
+           font-size: 24px;
+           margin: 10px 0;
+       }
+       
+       /* Review text with reduced vertical spacing */
+       .review-text {
+           color: #666666;
+           font-size: 24px;
+           margin: 20px 0;  /* Reduced from 40px */
+       }
+       
+       /* Base scroll container with reduced margins */
+       .scroll-container {
+           width: 800px;
+           height: 80vh;
+           overflow-x: hidden;
+           overflow-y: auto;
+           margin: 10px 0;  /* Reduced from 20px */
+           border: 3.5px solid #000000;
+           touch-action: pan-y;
+           -webkit-overflow-scrolling: touch;
+           position: relative;
+           left: 50%;
+           transform: translateX(-50%);
+       }
+       
+       /* Short container styling with vertical centering */
+       .short-container {
+           width: 100% !important;
+           max-width: none;
+           height: 28vh !important;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+       }
+       
+       /* Base document content styles */
+       .document-content {
+           width: 800px;
+           height: 1500px;
+           pointer-events: none;
+           user-select: none;
+           -webkit-user-select: none;
+           margin: 0;
+           padding: 0;
+       }
+       
+       /* Short content specific styles */
+       .short-content {
+           width: 100% !important;
+           height: 100% !important;
+           max-height: 28vh;
+           object-fit: contain;
+       }
+       
+       /* Base object element styles */
+       object {
+           width: 800px;
+           height: 1500px;
+           pointer-events: none;
+           margin: 0;
+           padding: 0;
+           display: block;
+       }
+       
+       /* Short container object styles */
+       .short-container object {
+           width: 100% !important;
+           height: 100% !important;
+           max-height: 28vh;
+       }
+
+       /* Large container content positioning */
+       .scroll-container:not(.short-container) .document-content {
+           margin-top: 0;
+           padding-top: 0;
+           position: relative;
+           top: 0;
+       }
+   </style>
+
+   
+   <script>
+   Qualtrics.SurveyEngine.addOnReady(function() {
+       // Immediate scroll
+       window.scrollTo(0,0);
+       
+       // After a short delay (100ms)
+       setTimeout(function() { 
+           window.scrollTo(0,0);
+       }, 100);
+       
+       // After content likely loaded (500ms)
+       setTimeout(function() { 
+           window.scrollTo(0,0);
+       }, 500);
+       
+       // Final backup scroll (1000ms)
+       setTimeout(function() { 
+           window.scrollTo({
+               top: 0,
+               behavior: 'instant'
+           });
+       }, 1000);
+   });
+   </script>
 </head>
 <body>
-    <div class="task-header">
-        <h2>Task Overview</h2>
-        <div class="job-details">
-            <p><span class="field-label">Job:</span> <span class="field-value">${lm://Field/3}</span></p>
-            <p><span class="field-label">General Responsibility:</span> <span class="field-value">${lm://Field/2}</span></p>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <p class="instruction">Please carefully review the following content:</p>
-        <div class="pdf-container">
-            <iframe src="${lm://Field/4}" class="pdf-content"></iframe>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <p class="instruction">Please carefully review the following content:</p>
-        <h3>Response #${lm://CurrentLoopNumber}</h3>
-        <div class="pdf-container">
-            <iframe src="${lm://Field/6}" class="pdf-content"></iframe>
-        </div>
-    </div>
+   
+   <a id="top" style="position: absolute; top: 0; visibility: hidden;"></a>
+   
+   <div class="content-wrapper">
+       <h3>Here is a reminder of the task at hand:</h3>
+       <div class="job-line">Job:<u>${lm://Field/3}</u></div>
+       <div class="responsibility-line">General responsibility:<u>${lm://Field/2}</u></div>
+       
+       <div class="review-text"><i>Please carefully review the following content:</i></div>
+       <div class="review-text">Task:</div>
+       
+       
+       <div class="scroll-container short-container">
+           <object 
+               data="${lm://Field/4}"
+               type="image/png"
+               class="document-content short-content">
+           </object>
+       </div>
+       
+       <div class="review-text"><i>Please carefully review the following content:</i></div>
+       <div class="review-text">Here is response #<u>${lm://CurrentLoopNumber}:</u></div>
+       
+       
+       <div class="scroll-container">
+           <object 
+               data="${lm://Field/6}"
+               type="image/png"
+               class="document-content">
+           </object>
+       </div>
+   </div>
 </body>
 </html>
